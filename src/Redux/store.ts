@@ -1,9 +1,9 @@
-import { combineReducers, createStore } from "redux";
-import { todoReducer } from "./todo-reducer";
+import { combineReducers, createStore } from 'redux';
+import { todoReducer } from './todo-reducer';
 
 export type AppStateType = ReturnType<typeof reducers>
 
-let reducers = combineReducers({
+const reducers = combineReducers({
     todo: todoReducer
 })
 

@@ -15,7 +15,6 @@ const Task: React.FC<TaskPropsType> = (props) => {
     }
 
     const deactivateEditMode = () => {
- 
         setEditTaskMode(false)
     }
 

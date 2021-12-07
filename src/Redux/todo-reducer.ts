@@ -5,13 +5,13 @@ export type TodoActionsType = InferActionTypes<typeof todoActions>
 export type TodoListItemType = {
     id: number,
     task: string,
-    progress: boolean
+    progress: boolean,
 }
 
 export type TodoInitialStateType = {
-    todoList: TodoListItemType[]
-    progressAll: boolean 
-    changedFilter: string
+    todoList: TodoListItemType[],
+    progressAll: boolean,
+    changedFilter: string,
 }
 
 const initialState: TodoInitialStateType = {
@@ -20,6 +20,7 @@ const initialState: TodoInitialStateType = {
     changedFilter: 'all',
 }
 
+// TODO: use enums instead of hardcoded strings
 export const todoReducer = (state = initialState, action: TodoActionsType ): TodoInitialStateType => {
     switch (action.type) {
         case 'ADD-TASK':
@@ -29,6 +30,7 @@ export const todoReducer = (state = initialState, action: TodoActionsType ): Tod
                 return task.id !== action.payload
             })}
         case 'TOGGLE-PROGRESS':
+            // TODO: use findIndex instead of map
             return {...state, todoList: state.todoList.map(task => {
                 if(task.id === action.payload) {
                     task.progress = !task.progress
@@ -36,6 +38,7 @@ export const todoReducer = (state = initialState, action: TodoActionsType ): Tod
                 return task
             })}
         case 'CHANGE-TASK': 
+            // TODO: use findIndex instead of map
             return {
                 ...state, todoList: state.todoList.map(task => {
                     return task.id === action.payload.id ? action.payload : task
@@ -50,9 +53,7 @@ export const todoReducer = (state = initialState, action: TodoActionsType ): Tod
             }
         case 'REMOVE-TASKS-ALL-COMPLITED':
             return {
-                ...state, todoList: state.todoList.filter(task => {
-                    return task.progress !== true
-                })
+                ...state, todoList: state.todoList.filter(task => !task.progress)
             }
         case 'CHANGE-FILTER':
             return {

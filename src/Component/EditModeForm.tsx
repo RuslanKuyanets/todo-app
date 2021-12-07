@@ -1,16 +1,16 @@
-import { Field, Form, Formik } from "formik"
-import { TodoListItemType } from "../Redux/todo-reducer"
-import { NewTaskFormSetSubmittingType } from "./NewTask"
+import { Field, Form, Formik } from 'formik'
+import { TodoListItemType } from '../Redux/todo-reducer'
+import { NewTaskFormSetSubmittingType } from './NewTask'
 
-const validateT = (values: any) => {
+const validateT = (values: {task: string}) => {
     const error = {}
     return error
 }
 
 export type EditModeFormProps = {
-    changeTask: (task: TodoListItemType) => void
-    deactivateEditMode: () => void
-    task: TodoListItemType
+    changeTask: (task: TodoListItemType) => void,
+    deactivateEditMode: () => void,
+    task: TodoListItemType,
 }
 
 const EditModeForm: React.FC<EditModeFormProps> = (props) => {
@@ -34,8 +34,8 @@ const EditModeForm: React.FC<EditModeFormProps> = (props) => {
     >
         {({ isSubmitting }) => (
             <Form>
-                <div className={'todo-form'} >
-                    <Field autoFocus = {true} onBlur = {props.deactivateEditMode} type="text" name="task" className={'todo-form__input editMode'} placeholder={'What needs to be done?'} />
+                <div className='todo-form' >
+                    <Field autoFocus = {true} onBlur = {props.deactivateEditMode} type='text' name='task' className='todo-form__input editMode' placeholder='What needs to be done?'/>
                 </div>
             </Form>
         )}
