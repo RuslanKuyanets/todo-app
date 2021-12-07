@@ -1,7 +1,3 @@
-// TODO: reorder sequence of imports
-// 1. React, react=redux...
-// 2. Your components
-// 3. styles
 // TODO: move all styles to where they belong (to their components)
 import React from 'react';
 import { Provider, connect } from 'react-redux';
@@ -78,9 +74,8 @@ const AppContainer = connect(mapStateToProps, {
   changeFilter: todoActions.changeFilter 
 })(App)
 
-// TODO: Array<> -> []
 export type AppStatePropsType = {
-  todoList: Array<TodoListItemType>
+  todoList: TodoListItemType[]
   progressAll: boolean
   changedFilter: string
 }

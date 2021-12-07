@@ -20,6 +20,13 @@ const initialState: TodoInitialStateType = {
     changedFilter: 'all',
 }
 
+const getIndexById = (id: number, array: TodoListItemType[]) => {
+    const index = array.findIndex(element => {
+        return element.id === id
+    })
+    return index
+}
+
 // TODO: use enums instead of hardcoded strings
 export const todoReducer = (state = initialState, action: TodoActionsType ): TodoInitialStateType => {
     switch (action.type) {
@@ -30,19 +37,15 @@ export const todoReducer = (state = initialState, action: TodoActionsType ): Tod
                 return task.id !== action.payload
             })}
         case 'TOGGLE-PROGRESS':
-            // TODO: use findIndex instead of map
-            return {...state, todoList: state.todoList.map(task => {
-                if(task.id === action.payload) {
-                    task.progress = !task.progress
-                }
-                return task
-            })}
+            let index = getIndexById(action.payload, state.todoList)
+            let currentProgress = state.todoList[index].progress
+            state.todoList[index].progress = !currentProgress
+            return {...state, todoList: [...state.todoList ]}
         case 'CHANGE-TASK': 
-            // TODO: use findIndex instead of map
+            let indexChanged = getIndexById(action.payload.id, state.todoList)
+            state.todoList[indexChanged] = action.payload 
             return {
-                ...state, todoList: state.todoList.map(task => {
-                    return task.id === action.payload.id ? action.payload : task
-                })
+                ...state, todoList: [...state.todoList ]
             }
         case 'TOGGLE-PROGRESS-ALL':
             return {
@@ -58,16 +61,6 @@ export const todoReducer = (state = initialState, action: TodoActionsType ): Tod
         case 'CHANGE-FILTER':
             return {
                 ...state, changedFilter: action.payload, 
-
-                // todoList: state.todoList.filter(task => {
-                //     if (action.payload === 'active') {
-                //         return task.progress === false
-                //     }
-                //     if (action.payload === 'completed') {
-                //         return task.progress === true
-                //     }
-                //     return task
-                // })
             }
         default: 
             return state

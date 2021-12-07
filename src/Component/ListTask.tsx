@@ -19,7 +19,8 @@ const ListTask: React.FC<ListTaskPropsType & { filteredList: Array<TodoListItemT
                         key={task.id}
                     />
                 )
-            })}
+            })
+            }
         </ul>
     )
 }
