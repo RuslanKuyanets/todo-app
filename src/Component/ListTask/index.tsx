@@ -1,5 +1,5 @@
-import { TodoListItemType } from '../Redux/todo-reducer'
-import Task from './Task'
+import { TodoListItemType } from '../../Redux/todo-reducer';
+import Task from '../Task';
 
 export type ListTaskPropsType = {
     removeTask: (id: number) => void,

@@ -1,4 +1,5 @@
-import { TodoListItemType } from '../Redux/todo-reducer'
+import { TodoListItemType } from '../../Redux/todo-reducer'
+import './style.css'
 
 export type TaskFilterType = {
     todoList: TodoListItemType[],

@@ -1,6 +1,6 @@
 import {Field, Form, Formik} from 'formik'
-import {TodoListItemType} from '../Redux/todo-reducer'
-import '../Styles/taskForm.css'
+import { TodoListItemType } from '../../Redux/todo-reducer'
+import '../../Styles/taskForm.css'
 
 export type NewTaskPropsType = {
     addTask: (task: TodoListItemType) => void,

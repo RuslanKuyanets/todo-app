@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik'
-import { TodoListItemType } from '../Redux/todo-reducer'
-import { NewTaskFormSetSubmittingType } from './NewTask'
+import { TodoListItemType } from '../../Redux/todo-reducer'
+import { NewTaskFormSetSubmittingType } from '../NewTask'
+
 
 const validateT = (values: {task: string}) => {
     const error = {}

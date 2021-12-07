@@ -1,8 +1,8 @@
-import { TodoListItemType } from "../Redux/todo-reducer"
-import { ListTaskPropsType } from "./ListTask"
-import '../Styles/taskItem.css'
-import { useState } from "react"
-import EditModeForm from "./EditModeForm"
+import { useState } from 'react'
+import { ListTaskPropsType } from '../ListTask'
+import { TodoListItemType } from '../../Redux/todo-reducer'
+import EditModeForm from '../EditModeForm'
+import '../../Styles/taskItem.css'
 
 export type TaskPropsType = ListTaskPropsType & {task: TodoListItemType}
 
