@@ -1,4 +1,3 @@
-// TODO: move all styles to where they belong (to their components)
 import React from 'react';
 import { Provider, connect } from 'react-redux';
 import store, { AppStateType } from './Redux/store';
@@ -8,8 +7,17 @@ import ListTask from './Component/ListTask';
 import TaskFilter from './Component/TaskFilter';
 import './App.css';
 
-// TODO: styling of code
 const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
+  const setCountActiveTasks = () => {
+    const count = props.todoList.reduce((sum, task) => {
+        if(!task.progress) {
+            return sum + 1
+        }
+        return sum
+    }, 0)
+    return count
+  }
+  const countActiveTasks = setCountActiveTasks()
   const setFilter = () => {
     if (props.changedFilter === 'active') {
         return props.todoList.filter(task => !task.progress)
@@ -42,6 +50,8 @@ const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
           changeFilter={props.changeFilter}
           removeTaskAllComplited={props.removeTaskAllComplited}
           todoList={props.todoList}
+          countActiveTasks = {countActiveTasks}
+          namesFilters = {props.namesFilters}
         />
       }
     </div>
@@ -60,7 +70,8 @@ const mapStateToProps = (state: AppStateType): AppStatePropsType => {
   return {
     todoList: state.todo.todoList,
     progressAll: state.todo.progressAll,
-    changedFilter: state.todo.changedFilter
+    changedFilter: state.todo.changedFilter,
+    namesFilters: state.todo.namesFilters,
   }
 }
 
@@ -75,9 +86,10 @@ const AppContainer = connect(mapStateToProps, {
 })(App)
 
 export type AppStatePropsType = {
-  todoList: TodoListItemType[]
-  progressAll: boolean
-  changedFilter: string
+  todoList: TodoListItemType[],
+  progressAll: boolean,
+  changedFilter: string,
+  namesFilters: string[],
 }
 export type AppDispatchPropsType = {
   addTask: (task: TodoListItemType) => void,

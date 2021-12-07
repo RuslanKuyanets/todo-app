@@ -12,12 +12,14 @@ export type TodoInitialStateType = {
     todoList: TodoListItemType[],
     progressAll: boolean,
     changedFilter: string,
+    namesFilters: string[],
 }
 
 const initialState: TodoInitialStateType = {
     todoList: [],
     progressAll: false,
     changedFilter: 'all',
+    namesFilters: ['all', 'active', 'completed'],
 }
 
 const getIndexById = (id: number, array: TodoListItemType[]) => {
