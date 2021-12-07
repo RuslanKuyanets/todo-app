@@ -22,12 +22,6 @@ const initialState: TodoInitialStateType = {
     namesFilters: ['all', 'active', 'completed'],
 }
 
-const getIndexById = (id: number, array: TodoListItemType[]) => {
-    const index = array.findIndex(element => {
-        return element.id === id
-    })
-    return index
-}
 enum ActionTypes {
     ADD_TASK = 'ADD-TASK',
     REMOVE_TASK = 'REMOVE-TASK',
@@ -40,6 +34,7 @@ enum ActionTypes {
 
 export const todoReducer = (state = initialState, action: TodoActionsType ): TodoInitialStateType => {
     switch (action.type) {
+        
         case ActionTypes.ADD_TASK:
             return {...state, todoList: [action.payload, ...state.todoList] }
         case ActionTypes.REMOVE_TASK:
@@ -47,15 +42,16 @@ export const todoReducer = (state = initialState, action: TodoActionsType ): Tod
                 return task.id !== action.payload
             })}
         case ActionTypes.TOGGLE_PROGRESS:
-            let index = getIndexById(action.payload, state.todoList)
-            let currentProgress = state.todoList[index].progress
-            state.todoList[index].progress = !currentProgress
-            return {...state, todoList: [...state.todoList ]}
+            const index = state.todoList.findIndex(element => element.id === action.payload)
+            const copyListToggleProgress = [...state.todoList]
+            copyListToggleProgress[index].progress = !copyListToggleProgress[index].progress
+            return {...state, todoList: copyListToggleProgress }
         case ActionTypes.CHANGE_TASK: 
-            let indexChanged = getIndexById(action.payload.id, state.todoList)
-            state.todoList[indexChanged] = action.payload 
+            const indexChanged = state.todoList.findIndex(element => element.id === action.payload.id)
+            const copyListChangeTask = [...state.todoList]
+            copyListChangeTask[indexChanged] = action.payload 
             return {
-                ...state, todoList: [...state.todoList ]
+                ...state, todoList: copyListChangeTask
             }
         case ActionTypes.TOGGLE_PROGRESS_ALL:
             return {

@@ -7,10 +7,10 @@ export type ListTaskPropsType = {
     changeTask: (task: TodoListItemType) => void,  
 }
 
-const ListTask: React.FC<ListTaskPropsType & { filteredList: Array<TodoListItemType>, changedFilter: string }> = (props) => {
+const ListTask: React.FC<ListTaskPropsType & { setFilter: () => TodoListItemType[], changedFilter: string }> = (props) => {
     return (
         <ul>
-            {props.filteredList.map(task => {
+            {props.setFilter().map(task => {
                 return (
                     <Task task={task}
                         removeTask={props.removeTask}
