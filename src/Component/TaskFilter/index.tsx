@@ -22,7 +22,7 @@ const TaskFilter: React.FC<TaskFilterType> = (props) => {
             <p className='task-filter__count'>Active tasks: {props.activeTasksCount}</p>
             <div className='task-filter__filters'>
                 {props.namesFilters.map(filter => {
-                    return <button onClick={changeFilter} className={setClassActive(filter)} value={filter}>{filter}</button>
+                    return <button key = {filter} onClick={changeFilter} className={setClassActive(filter)} value={filter}>{filter}</button>
                 })}
             </div>
             <button onClick={props.removeTaskAllComplited}>Clear Completed</button>

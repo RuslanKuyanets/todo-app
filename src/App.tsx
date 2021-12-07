@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider, connect } from 'react-redux';
-import store, { AppStateType } from './Redux/store';
+import { PersistGate } from 'redux-persist/integration/react'
+import  store,{  AppStateType, persistor } from './Redux/store';
 import { todoActions, TodoListItemType } from './Redux/todo-reducer';
 import NewTask from './Component/NewTask';
 import ListTask from './Component/ListTask';
@@ -53,7 +54,9 @@ const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
 const AppMain: React.FC = () => {
   return (
     <Provider store={store}>
-      <AppContainer />
+      <PersistGate loading={null} persistor={persistor}>
+        <AppContainer />
+      </PersistGate>
     </Provider>
   )
 }
