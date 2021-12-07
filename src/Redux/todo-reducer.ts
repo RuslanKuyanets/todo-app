@@ -26,39 +26,47 @@ const getIndexById = (id: number, array: TodoListItemType[]) => {
     })
     return index
 }
+enum ActionTypes {
+    ADD_TASK = 'ADD-TASK',
+    REMOVE_TASK = 'REMOVE-TASK',
+    TOGGLE_PROGRESS = 'TOGGLE-PROGRESS',
+    CHANGE_TASK = 'CHANGE-TASK',
+    TOGGLE_PROGRESS_ALL = 'TOGGLE-PROGRESS-ALL',
+    REMOVE_TASKS_ALL_COMPLITED = 'REMOVE-TASKS-ALL-COMPLITED',
+    CHANGE_FILTER = 'CHANGE-FILTER',
+}
 
-// TODO: use enums instead of hardcoded strings
 export const todoReducer = (state = initialState, action: TodoActionsType ): TodoInitialStateType => {
     switch (action.type) {
-        case 'ADD-TASK':
+        case ActionTypes.ADD_TASK:
             return {...state, todoList: [action.payload, ...state.todoList] }
-        case 'REMOVE-TASK':
+        case ActionTypes.REMOVE_TASK:
             return {...state, todoList: state.todoList.filter(task => {
                 return task.id !== action.payload
             })}
-        case 'TOGGLE-PROGRESS':
+        case ActionTypes.TOGGLE_PROGRESS:
             let index = getIndexById(action.payload, state.todoList)
             let currentProgress = state.todoList[index].progress
             state.todoList[index].progress = !currentProgress
             return {...state, todoList: [...state.todoList ]}
-        case 'CHANGE-TASK': 
+        case ActionTypes.CHANGE_TASK: 
             let indexChanged = getIndexById(action.payload.id, state.todoList)
             state.todoList[indexChanged] = action.payload 
             return {
                 ...state, todoList: [...state.todoList ]
             }
-        case 'TOGGLE-PROGRESS-ALL':
+        case ActionTypes.TOGGLE_PROGRESS_ALL:
             return {
                 ...state, progressAll: !state.progressAll, todoList: state.todoList.map(task => {
                     task.progress = !state.progressAll
                     return task
                 })
             }
-        case 'REMOVE-TASKS-ALL-COMPLITED':
+        case ActionTypes.REMOVE_TASKS_ALL_COMPLITED:
             return {
                 ...state, todoList: state.todoList.filter(task => !task.progress)
             }
-        case 'CHANGE-FILTER':
+        case ActionTypes.CHANGE_FILTER:
             return {
                 ...state, changedFilter: action.payload, 
             }
@@ -70,41 +78,41 @@ export const todoReducer = (state = initialState, action: TodoActionsType ): Tod
 export const todoActions = {
     addTask: (task: TodoListItemType) => {
         return {
-            type: 'ADD-TASK',
+            type: ActionTypes.ADD_TASK,
             payload: task
         } as const
     },
     removeTask: (id: number) => {
         return {
-            type: 'REMOVE-TASK',
+            type: ActionTypes.REMOVE_TASK,
             payload: id
         } as const
     },
     toggleProgress: (id: number) => {
         return {
-            type: 'TOGGLE-PROGRESS',
+            type: ActionTypes.TOGGLE_PROGRESS,
             payload: id
         } as const
     },
     changeTask: (task: TodoListItemType) => {
         return {
-            type: 'CHANGE-TASK',
+            type: ActionTypes.CHANGE_TASK,
             payload: task
         } as const
     },
     toggleProgressAll: () => {
         return {
-            type: 'TOGGLE-PROGRESS-ALL',
+            type: ActionTypes.TOGGLE_PROGRESS_ALL,
         } as const
     }, 
     removeTaskAllComplited: () => {
         return {
-            type: 'REMOVE-TASKS-ALL-COMPLITED'
+            type: ActionTypes.REMOVE_TASKS_ALL_COMPLITED
         } as const
     },
     changeFilter: (filter: string) => {
         return {
-            type: 'CHANGE-FILTER',
+            type: ActionTypes.CHANGE_FILTER,
             payload: filter
         } as const
     }
