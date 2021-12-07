@@ -6,7 +6,7 @@ export type TaskFilterType = {
     removeTaskAllComplited: () => void,
     changeFilter: (filter: string) => void,
     changedFilter: string,
-    setCountActiveTasks: () => number,
+    activeTasksCount: number,
     namesFilters: string[],
 }
 
@@ -19,7 +19,7 @@ const TaskFilter: React.FC<TaskFilterType> = (props) => {
     }
     return (
         <div className='task-filter'>
-            <p className='task-filter__count'>Active tasks: {props.setCountActiveTasks()}</p>
+            <p className='task-filter__count'>Active tasks: {props.activeTasksCount}</p>
             <div className='task-filter__filters'>
                 {props.namesFilters.map(filter => {
                     return <button onClick={changeFilter} className={setClassActive(filter)} value={filter}>{filter}</button>

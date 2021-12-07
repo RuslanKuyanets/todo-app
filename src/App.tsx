@@ -8,9 +8,9 @@ import TaskFilter from './Component/TaskFilter';
 import './App.css';
 
 const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
-  const setCountActiveTasks = () => props.todoList.reduce((sum, task) => !task.progress ? sum + 1 : sum, 0)
+  const getCountActiveTasks = () => props.todoList.reduce((sum, task) => !task.progress ? sum + 1 : sum, 0)
   
-  const setFilter = () => {
+  const getFilteredTasks = () => {
     if (props.changedFilter === 'active') {
         return props.todoList.filter(task => !task.progress)
     } else if (props.changedFilter === 'completed') {
@@ -31,7 +31,7 @@ const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
       />
       <ListTask
         changedFilter={props.changedFilter}
-        setFilter={setFilter}
+        tasks={getFilteredTasks()}
         removeTask={props.removeTask}
         toggleProgress={props.toggleProgress}
         changeTask={props.changeTask}
@@ -42,7 +42,7 @@ const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
           changeFilter={props.changeFilter}
           removeTaskAllComplited={props.removeTaskAllComplited}
           todoList={props.todoList}
-          setCountActiveTasks = {setCountActiveTasks}
+          activeTasksCount={getCountActiveTasks()}
           namesFilters = {props.namesFilters}
         />
       }
