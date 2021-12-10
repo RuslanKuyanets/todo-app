@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Provider, connect } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react'
 import  store,{  AppStateType } from './Redux/store';
 import { addTask, changeTask, getTodosThunkCreator, removeTask, removeTaskAllComplited, todoActions, TodoListItemType, toggleProgress, toggleProgressAll } from './Redux/todo-reducer';
 import NewTask from './Component/NewTask';
@@ -55,7 +54,6 @@ const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
     </div>
   );
 }
-//<PersistGate loading={null} persistor={persistor}></PersistGate>
 
 const AppMain: React.FC = () => {
   return (
@@ -85,7 +83,7 @@ const AppContainer = connect(mapStateToProps, {
   changeFilter: todoActions.changeFilter,
   getTodos: getTodosThunkCreator
 })(App)
-//  
+
 export type AppStatePropsType = {
   todoList: TodoListItemType[],
   progressAll: boolean,
