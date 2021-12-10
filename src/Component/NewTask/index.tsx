@@ -3,8 +3,7 @@ import { TodoListItemType } from '../../Redux/todo-reducer'
 import '../../Styles/taskForm.css'
 
 export type NewTaskPropsType = {
-    addTask: (task: TodoListItemType) => void,
-    toggleProgress: (id: number) => void,
+    addTask: (task: string) => void,
     toggleProgressAll: () => void,
     progressAll: boolean,
 }
@@ -16,12 +15,7 @@ const validateT = (values: {task: string}) => {
 
 const NewTask: React.FC<NewTaskPropsType> = (props) => {
     const addTask = (values: {task: string}, {setSubmitting, resetForm}: NewTaskFormSetSubmittingType) => {
-        const newTask = {
-            id: Math.random(),
-            task: values.task,
-            progress: false
-        }
-        props.addTask(newTask)
+        props.addTask(values.task)
         setSubmitting(false)
         resetForm()
     }

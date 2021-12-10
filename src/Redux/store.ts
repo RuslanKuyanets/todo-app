@@ -1,12 +1,6 @@
-import { combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { todoReducer } from './todo-reducer';
-import { persistStore, persistReducer } from 'redux-persist'
-import localStorage from 'redux-persist/lib/storage' 
-
-const persistConfig = {
-    key: 'root',
-    storage: localStorage
-}
+import thunk from 'redux-thunk';
 
 export type AppStateType = ReturnType<typeof reducers>
 
@@ -14,9 +8,6 @@ const reducers = combineReducers({
     todo: todoReducer
 })
 
-const persistedReducer = persistReducer(persistConfig, reducers)
-
-let store = createStore(persistedReducer)
-export let persistor = persistStore(store)
+let store = createStore(reducers, applyMiddleware(thunk))
 
 export default store
