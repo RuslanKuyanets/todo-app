@@ -19,7 +19,7 @@ const EditModeForm: React.FC<EditModeFormProps> = (props) => {
     const changeTask = (values: {task: string}, { setSubmitting, resetForm }: NewTaskFormSetSubmittingType) => {
         let newTask = {
             id: props.task.id,
-            task: values.task,
+            title: values.task,
             progress: props.task.progress
         }
         props.changeTask(newTask)
@@ -29,7 +29,7 @@ const EditModeForm: React.FC<EditModeFormProps> = (props) => {
 
     return (
         <Formik
-        initialValues={{ task: props.task.task }}
+        initialValues={{ task: props.task.title }}
         validate={validateT}
         onSubmit={changeTask}
     >

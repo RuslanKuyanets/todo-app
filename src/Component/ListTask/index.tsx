@@ -2,8 +2,8 @@ import { TodoListItemType } from '../../Redux/todo-reducer';
 import Task from '../Task';
 
 export type ListTaskPropsType = {
-    removeTask: (id: number) => void,
-    toggleProgress: (id: number) => void,
+    removeTask: (id: string) => void,
+    toggleProgress: (task: TodoListItemType) => void,
     changeTask: (task: TodoListItemType) => void,  
 }
 

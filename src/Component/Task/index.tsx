@@ -19,11 +19,11 @@ const Task: React.FC<TaskPropsType> = (props) => {
             ? 'list-task__task finished'
             : 'list-task__task'}>
             {props.task.progress 
-                ? <span onClick = {() => props.toggleProgress(props.task.id)} className = {'task-progress'} >&#10003;</span> 
-                : <span onClick = {() => props.toggleProgress(props.task.id)} className = {'task-progress'} ></span>} 
+                ? <span onClick = {() => props.toggleProgress(props.task)} className = {'task-progress'} >&#10003;</span> 
+                : <span onClick = {() => props.toggleProgress(props.task)} className = {'task-progress'} ></span>} 
             {editTaskMode 
                 ? <EditModeForm deactivateEditMode = {deactivateEditMode} task = {props.task} changeTask = {props.changeTask} /> 
-                : <h3 onDoubleClick = {activateEditMode} className = {'task-title'}>{props.task.task}</h3>}         
+                : <h3 onDoubleClick = {activateEditMode} className = {'task-title'}>{props.task.title}</h3>}         
             <span onClick = {() => props.removeTask(props.task.id)} className = {'task-remove'} >&#10005;</span>
         </li>
     )
