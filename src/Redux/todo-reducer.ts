@@ -101,7 +101,7 @@ export const todoActions = {
             payload: todos
         } as const
     },    
-    getTodosError: (error: 'string') => {
+    getTodosError: (error: string) => {
         return {
             type: ActionTypes.GET_TODOS_ERROR,
             payload: error
@@ -119,7 +119,7 @@ export const todoActions = {
             payload: task
         } as const
     },
-    addTaskError: (error: 'string') => {
+    addTaskError: (error: string) => {
         return {
             type: ActionTypes.GET_TODOS_ERROR,
             payload: error
@@ -137,7 +137,7 @@ export const todoActions = {
             payload: id
         } as const
     },
-    removeTaskError: (error: 'string') => {
+    removeTaskError: (error: string) => {
         return {
             type: ActionTypes.GET_TODOS_ERROR,
             payload: error
@@ -155,7 +155,7 @@ export const todoActions = {
             payload: id
         } as const
     },
-    toggleProgressError: (error: 'string') => {
+    toggleProgressError: (error: string) => {
         return {
             type: ActionTypes.GET_TODOS_ERROR,
             payload: error
@@ -173,7 +173,7 @@ export const todoActions = {
             payload: task
         } as const
     },
-    changeTaskError: (error: 'string') => {
+    changeTaskError: (error: string) => {
         return {
             type: ActionTypes.GET_TODOS_ERROR,
             payload: error
@@ -190,7 +190,7 @@ export const todoActions = {
             type: ActionTypes.TOGGLE_PROGRESS_ALL_SUCCESS,
         } as const
     }, 
-    toggleProgressAllError: (error: 'string') => {
+    toggleProgressAllError: (error: string) => {
         return {
             type: ActionTypes.GET_TODOS_ERROR,
             payload: error
@@ -201,7 +201,7 @@ export const todoActions = {
             type: ActionTypes.REMOVE_COMPLETED_SUCCESS
         } as const
     },
-    removeCompletedError: (error: 'string') => {
+    removeCompletedError: (error: string) => {
         return {
             type: ActionTypes.GET_TODOS_ERROR,
             payload: error
