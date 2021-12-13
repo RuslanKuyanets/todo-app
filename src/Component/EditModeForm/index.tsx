@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik'
-import { TodoListItemType } from '../../Redux/todo-reducer'
+import { useDispatch } from 'react-redux'
+import { ActionTypes, TodoListItemType } from '../../Redux/todo-reducer'
 import { NewTaskFormSetSubmittingType } from '../NewTask'
 
 
@@ -9,20 +10,19 @@ const validateT = (values: {task: string}) => {
 }
 
 export type EditModeFormProps = {
-    changeTask: (task: TodoListItemType) => void,
     deactivateEditMode: () => void,
     task: TodoListItemType,
 }
 
 const EditModeForm: React.FC<EditModeFormProps> = (props) => {
-
+    const dispatch = useDispatch()
     const changeTask = (values: {task: string}, { setSubmitting, resetForm }: NewTaskFormSetSubmittingType) => {
         let newTask = {
             id: props.task.id,
             title: values.task,
             progress: props.task.progress
         }
-        props.changeTask(newTask)
+        dispatch({type: ActionTypes.CHANGE_TASK, payload: newTask})
         setSubmitting(false)
         props.deactivateEditMode()
     }

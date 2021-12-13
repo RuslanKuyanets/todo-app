@@ -1,9 +1,9 @@
-import { TodoListItemType } from '../../Redux/todo-reducer'
+import { useDispatch } from 'react-redux'
+import { ActionTypes, TodoListItemType } from '../../Redux/todo-reducer'
 import './style.css'
 
 export type TaskFilterType = {
     todoList: TodoListItemType[],
-    removeTaskAllComplited: () => void,
     changeFilter: (filter: string) => void,
     changedFilter: string,
     activeTasksCount: number,
@@ -11,6 +11,7 @@ export type TaskFilterType = {
 }
 
 const TaskFilter: React.FC<TaskFilterType> = (props) => {
+    const dispatch = useDispatch()
     const setClassActive = (name: string) => props.changedFilter === name ? 'active' : ''
     
     const changeFilter = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -25,7 +26,7 @@ const TaskFilter: React.FC<TaskFilterType> = (props) => {
                     return <button key = {filter} onClick={changeFilter} className={setClassActive(filter)} value={filter}>{filter}</button>
                 })}
             </div>
-            <button onClick={props.removeTaskAllComplited}>Clear Completed</button>
+            <button onClick={() => dispatch({type: ActionTypes.REMOVE_COMPLETED})}>Clear Completed</button>
         </div>
     )
 }

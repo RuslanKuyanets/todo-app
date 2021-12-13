@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { ListTaskPropsType } from '../ListTask'
-import { TodoListItemType } from '../../Redux/todo-reducer'
+import { ActionTypes, TodoListItemType } from '../../Redux/todo-reducer'
 import EditModeForm from '../EditModeForm'
 import '../../Styles/taskItem.css'
+import { useDispatch } from 'react-redux'
 
 export type TaskPropsType = ListTaskPropsType & {task: TodoListItemType}
 
 const Task: React.FC<TaskPropsType> = (props) => {
+    const dispatch = useDispatch()
     const [editTaskMode, setEditTaskMode] = useState(false)
     const activateEditMode = () => {
         setEditTaskMode(true)
@@ -19,12 +21,12 @@ const Task: React.FC<TaskPropsType> = (props) => {
             ? 'list-task__task finished'
             : 'list-task__task'}>
             {props.task.progress 
-                ? <span onClick = {() => props.toggleProgress(props.task)} className = {'task-progress'} >&#10003;</span> 
-                : <span onClick = {() => props.toggleProgress(props.task)} className = {'task-progress'} ></span>} 
+                ? <span onClick = {() => dispatch({type: ActionTypes.TOGGLE_PROGRESS, payload: props.task}) } className = {'task-progress'} >&#10003;</span> 
+                : <span onClick = {() => dispatch({type: ActionTypes.TOGGLE_PROGRESS, payload: props.task}) } className = {'task-progress'} ></span>} 
             {editTaskMode 
-                ? <EditModeForm deactivateEditMode = {deactivateEditMode} task = {props.task} changeTask = {props.changeTask} /> 
+                ? <EditModeForm deactivateEditMode = {deactivateEditMode} task = {props.task} /> 
                 : <h3 onDoubleClick = {activateEditMode} className = {'task-title'}>{props.task.title}</h3>}         
-            <span onClick = {() => props.removeTask(props.task.id)} className = {'task-remove'} >&#10005;</span>
+            <span onClick = {() => dispatch({type: ActionTypes.REMOVE_TASK, payload: props.task.id}) } className = {'task-remove'} >&#10005;</span>
         </li>
     )
 }
