@@ -1,6 +1,4 @@
-import { todoApi } from "../api/api"
-import { InferActionTypes, ThunkType } from "../Types/CommonTypes"
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects'
+import { InferActionTypes } from "../Types/CommonTypes"
 
 export type TodoActionsType = InferActionTypes<typeof todoActions> 
 
@@ -37,8 +35,8 @@ export enum ActionTypes {
     CHANGE_TASK = 'CHANGE-TASK',
     TOGGLE_PROGRESS_ALL_SUCCESS = 'TOGGLE-PROGRESS-ALL-SUCCESS',
     TOGGLE_PROGRESS_ALL = 'TOGGLE-PROGRESS-ALL',
-    REMOVE_TASKS_ALL_COMPLETED_SUCCESS = 'REMOVE-TASKS-ALL-COMPLETED-SUCCESS',
-    REMOVE_TASKS_ALL_COMPLETED = 'REMOVE-TASKS-ALL-COMPLETED',
+    REMOVE_COMPLETED_SUCCESS = 'REMOVE-COMPLETED-SUCCESS',
+    REMOVE_COMPLETED = 'REMOVE-COMPLETED',
     CHANGE_FILTER = 'CHANGE-FILTER',
     TOGGLE_IS_FETCHING = 'TOGGLE-IS-FETCHING',
     GET_TODOS_SUCCESS = 'GET-TODOS-SUCCESS',
@@ -75,7 +73,7 @@ export const todoReducer = (state = initialState, action: TodoActionsType ): Tod
                     return task
                 })
             }
-        case ActionTypes.REMOVE_TASKS_ALL_COMPLETED_SUCCESS:
+        case ActionTypes.REMOVE_COMPLETED_SUCCESS:
             return {
                 ...state, todoList: state.todoList.filter(task => !task.progress)
             }
@@ -97,10 +95,16 @@ export const todoReducer = (state = initialState, action: TodoActionsType ): Tod
 }
 
 export const todoActions = {
-    addTaskSuccess: (task: TodoListItemType) => {
+    getTodosSuccess: (todos: TodoListItemType[]) => {
         return {
-            type: ActionTypes.ADD_TASK_SUCCESS,
-            payload: task
+            type: ActionTypes.GET_TODOS_SUCCESS,
+            payload: todos
+        } as const
+    },    
+    getTodosError: (error: 'string') => {
+        return {
+            type: ActionTypes.GET_TODOS_ERROR,
+            payload: error
         } as const
     },
     addTask: (title: string) => {
@@ -109,10 +113,16 @@ export const todoActions = {
             payload: title
         } as const
     },
-    removeTaskSuccess: (id: string) => {
+    addTaskSuccess: (task: TodoListItemType) => {
         return {
-            type: ActionTypes.REMOVE_TASK_SUCCESS,
-            payload: id
+            type: ActionTypes.ADD_TASK_SUCCESS,
+            payload: task
+        } as const
+    },
+    addTaskError: (error: 'string') => {
+        return {
+            type: ActionTypes.GET_TODOS_ERROR,
+            payload: error
         } as const
     },
     removeTask: (id: string) => {
@@ -120,23 +130,35 @@ export const todoActions = {
             type: ActionTypes.REMOVE_TASK,
             payload: id
         } as const
+    },    
+    removeTaskSuccess: (id: string) => {
+        return {
+            type: ActionTypes.REMOVE_TASK_SUCCESS,
+            payload: id
+        } as const
     },
+    removeTaskError: (error: 'string') => {
+        return {
+            type: ActionTypes.GET_TODOS_ERROR,
+            payload: error
+        } as const
+    },
+    toggleProgress: (id: string) => {
+        return {
+            type: ActionTypes.TOGGLE_PROGRESS,
+            payload: id
+        } as const
+    },    
     toggleProgressSuccess: (id: string) => {
         return {
             type: ActionTypes.TOGGLE_PROGRESS_SUCCESS,
             payload: id
         } as const
     },
-    toggleProgres: (id: string) => {
+    toggleProgressError: (error: 'string') => {
         return {
-            type: ActionTypes.TOGGLE_PROGRESS,
-            payload: id
-        } as const
-    },
-    changeTaskSuccess: (task: TodoListItemType) => {
-        return {
-            type: ActionTypes.CHANGE_TASK_SUCCESS,
-            payload: task
+            type: ActionTypes.GET_TODOS_ERROR,
+            payload: error
         } as const
     },
     changeTast: (task: TodoListItemType) => {
@@ -144,21 +166,45 @@ export const todoActions = {
             type: ActionTypes.CHANGE_TASK,
             payload: task
         } as const
-    },
-    toggleProgressAllSuccess: () => {
+    },    
+    changeTaskSuccess: (task: TodoListItemType) => {
         return {
-            type: ActionTypes.TOGGLE_PROGRESS_ALL_SUCCESS,
+            type: ActionTypes.CHANGE_TASK_SUCCESS,
+            payload: task
         } as const
-    }, 
+    },
+    changeTaskError: (error: 'string') => {
+        return {
+            type: ActionTypes.GET_TODOS_ERROR,
+            payload: error
+        } as const
+    },
     toggleProgressAll: (progress: boolean) => {
         return {
             type: ActionTypes.TOGGLE_PROGRESS_ALL,
             payload: progress
         } as const
-    }, 
-    removeTaskAllCompletedSuccess: () => {
+    },     
+    toggleProgressAllSuccess: () => {
         return {
-            type: ActionTypes.REMOVE_TASKS_ALL_COMPLETED_SUCCESS
+            type: ActionTypes.TOGGLE_PROGRESS_ALL_SUCCESS,
+        } as const
+    }, 
+    toggleProgressAllError: (error: 'string') => {
+        return {
+            type: ActionTypes.GET_TODOS_ERROR,
+            payload: error
+        } as const
+    },
+    removeCompletedSuccess: () => {
+        return {
+            type: ActionTypes.REMOVE_COMPLETED_SUCCESS
+        } as const
+    },
+    removeCompletedError: (error: 'string') => {
+        return {
+            type: ActionTypes.GET_TODOS_ERROR,
+            payload: error
         } as const
     },
     changeFilter: (filter: string) => {
@@ -173,91 +219,4 @@ export const todoActions = {
             payload: isFetching
         } as const
     },
-    getTodosSuccess: (todos: TodoListItemType[]) => {
-        return {
-            type: ActionTypes.GET_TODOS_SUCCESS,
-            payload: todos
-        } as const
-    },    
-    getTodosError: (error: 'string') => {
-        return {
-            type: ActionTypes.GET_TODOS_ERROR,
-            payload: error
-        } as const
-    },
-}
-
-function* fetchRemoveCompletedTodos() {
-    try {
-        yield call(todoApi.removeCompletedTodos)      
-        yield put(todoActions.removeTaskAllCompletedSuccess())      
-    } catch (e) {
-       console.log(e)
-    }
-}
-
-function* fetchToggleProgressAll(action: {type: string, payload: boolean}) {
-    try {      
-        yield call(todoApi.toggleProgressAll, !action.payload)        
-        yield put(todoActions.toggleProgressAllSuccess())
-    } catch (error: any) {
-        yield put(todoActions.getTodosError(error.message))
-    }
-}
-
-function* fetchToggleProgressTodo(action: {type: string, payload: TodoListItemType}) {
-    try {
-        yield call(todoApi.toggleProgress, action.payload.id, action.payload.progress)      
-        yield put(todoActions.toggleProgressSuccess(action.payload.id))       
-    } catch (e) {
-       console.log(e)
-    }
-}
-
-function* fetchChangeTodo(action: {type: string, payload: TodoListItemType}) {
-    try {
-        yield call(todoApi.updateTodo, action.payload.id, action.payload.title)      
-        yield put(todoActions.changeTaskSuccess(action.payload))          
-    } catch (e) {
-       console.log(e)
-    }
-}
-
-function* fetchRemoveTodo(action: {type: string, payload: string}) {
-    try {
-        yield call(todoApi.removeTodo, action.payload)      
-        yield put(todoActions.removeTaskSuccess(action.payload))         
-    } catch (e) {
-       console.log(e)
-    }
-}
-
-function* fetchAddTodo(action: {type: string, payload: string}) {
-    try {
-        const response: TodoListItemType = yield call(todoApi.addTodo, action.payload)      
-        yield put(todoActions.addTaskSuccess(response))      
-    } catch (e) {
-       console.log(e)
-    }
-}
-
-function* fetchGetTodo() {
-    try {
-        yield put(todoActions.toggleIsFetching(true))
-        const response: TodoListItemType[] = yield call(todoApi.getTodos)        
-        yield put(todoActions.getTodosSuccess(response.reverse()))
-        yield put(todoActions.toggleIsFetching(false))      
-    } catch (error: any) {
-        yield put(todoActions.getTodosError(error.message))
-    }
-}
-
-export function* todosSaga() {
-    yield takeEvery(ActionTypes.GET_TODOS, fetchGetTodo);
-    yield takeEvery(ActionTypes.ADD_TASK, fetchAddTodo);
-    yield takeEvery(ActionTypes.REMOVE_TASK, fetchRemoveTodo);
-    yield takeEvery(ActionTypes.CHANGE_TASK, fetchChangeTodo);
-    yield takeEvery(ActionTypes.TOGGLE_PROGRESS, fetchToggleProgressTodo);
-    yield takeEvery(ActionTypes.TOGGLE_PROGRESS_ALL, fetchToggleProgressAll);
-    yield takeEvery(ActionTypes.REMOVE_TASKS_ALL_COMPLETED, fetchRemoveCompletedTodos);
 }

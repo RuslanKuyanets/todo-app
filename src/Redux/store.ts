@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
-import { todoReducer, todosSaga } from './todo-reducer';
+import { todoReducer } from './todo-reducer';
 import createSagaMiddleware from 'redux-saga'
-import thunk from 'redux-thunk';
+import { todosSaga } from './sagas';
 
 export type AppStateType = ReturnType<typeof reducers>
 
@@ -11,7 +11,7 @@ const reducers = combineReducers({
     todo: todoReducer
 })
 
-let store = createStore(reducers, applyMiddleware(sagaMiddleware, thunk))
+const store = createStore(reducers, applyMiddleware(sagaMiddleware))
 
 sagaMiddleware.run(todosSaga)
 

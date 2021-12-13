@@ -26,7 +26,7 @@ const TaskFilter: React.FC<TaskFilterType> = (props) => {
                     return <button key = {filter} onClick={changeFilter} className={setClassActive(filter)} value={filter}>{filter}</button>
                 })}
             </div>
-            <button onClick={() => dispatch({type: ActionTypes.REMOVE_TASKS_ALL_COMPLETED})}>Clear Completed</button>
+            <button onClick={() => dispatch({type: ActionTypes.REMOVE_COMPLETED})}>Clear Completed</button>
         </div>
     )
 }
