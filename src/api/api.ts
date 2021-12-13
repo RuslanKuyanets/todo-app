@@ -11,19 +11,24 @@ export type ApiGetTodosType = {
 
 export const todoApi = {
     getTodos() {
-        return axios.get<ApiGetTodosType[]>(BASE_URL).then(data => {           
-            const todos = data.data.map(elem => {
+        return axios.get<ApiGetTodosType[]>(BASE_URL).then(data => {
+            return data.data.map(elem => {
                 return {
                     title: elem.title,
                     id: elem._id,
                     progress: elem.completed
                 }
             })
-            return todos
         })
     },
     addTodo(title: string) {
-        return axios.post(BASE_URL, {title: title}).then(data => data.data)
+        return axios.post(BASE_URL, {title: title}).then(data => {
+            return {
+                title: data.data.title,
+                id: data.data._id,
+                progress: data.data.completed
+            }
+        })
     },
     removeTodo(id: string) {
         return axios.delete(BASE_URL + `/${id}`)

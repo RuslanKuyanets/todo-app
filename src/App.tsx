@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Provider, connect } from 'react-redux';
+import { Provider, connect, useDispatch } from 'react-redux';
 import  store,{  AppStateType } from './Redux/store';
-import { addTask, changeTask, getTodosThunkCreator, removeTask, removeTaskAllComplited, todoActions, TodoListItemType, toggleProgress, toggleProgressAll } from './Redux/todo-reducer';
+import { ActionTypes, todoActions, TodoListItemType } from './Redux/todo-reducer';
 import NewTask from './Component/NewTask';
 import ListTask from './Component/ListTask';
 import TaskFilter from './Component/TaskFilter';
@@ -9,6 +9,7 @@ import './App.css';
 import Preloader from './Component/Preloader/Preloader';
 
 const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
+  const dispatch = useDispatch()
   const getCountActiveTasks = () => props.todoList.reduce((sum, task) => !task.progress ? sum + 1 : sum, 0)
   
   const getFilteredTasks = () => {
@@ -22,7 +23,7 @@ const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
   }
   
   useEffect(() => {
-    props.getTodos()
+    dispatch({type: ActionTypes.GET_TODOS})
   },[])
 
   return (
@@ -30,22 +31,16 @@ const App: React.FC<AppStatePropsType & AppDispatchPropsType> = (props) => {
       <h1 className='app-title'>todos</h1>
       <NewTask 
         progressAll={props.progressAll} 
-        addTask = {props.addTask} 
-        toggleProgressAll = {props.toggleProgressAll}
       />
       {props.isFetching ? <Preloader/> : <ListTask
         changedFilter={props.changedFilter}
         tasks={getFilteredTasks()}
-        removeTask={props.removeTask}
-        toggleProgress={props.toggleProgress}
-        changeTask={props.changeTask}
       />}
 
       {props.todoList.length > 0
         && <TaskFilter
           changedFilter={props.changedFilter}
           changeFilter={props.changeFilter}
-          removeTaskAllComplited={props.removeTaskAllComplited}
           todoList={props.todoList}
           activeTasksCount={getCountActiveTasks()}
           namesFilters = {props.namesFilters}
@@ -74,14 +69,7 @@ const mapStateToProps = (state: AppStateType): AppStatePropsType => {
 }
 
 const AppContainer = connect(mapStateToProps, { 
-  addTask: addTask, 
-  removeTask: removeTask, 
-  toggleProgress: toggleProgress,
-  changeTask: changeTask,
-  toggleProgressAll: toggleProgressAll,
-  removeTaskAllComplited: removeTaskAllComplited,
   changeFilter: todoActions.changeFilter,
-  getTodos: getTodosThunkCreator
 })(App)
 
 export type AppStatePropsType = {
@@ -92,14 +80,7 @@ export type AppStatePropsType = {
   isFetching: boolean,
 }
 export type AppDispatchPropsType = {
-  addTask: (title: string) => void,
-  removeTask: (id: string) => void,
-  toggleProgress: (task: TodoListItemType) => void,
-  changeTask: (task: TodoListItemType) => void,
-  toggleProgressAll: () => void,
-  removeTaskAllComplited: () => void,
   changeFilter: (filter: string) => void,
-  getTodos: () => void
 }
 
 export default AppMain;

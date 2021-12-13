@@ -1,10 +1,9 @@
 import {Field, Form, Formik} from 'formik'
-import { TodoListItemType } from '../../Redux/todo-reducer'
+import { useDispatch } from 'react-redux'
+import { ActionTypes, TodoListItemType } from '../../Redux/todo-reducer'
 import '../../Styles/taskForm.css'
 
 export type NewTaskPropsType = {
-    addTask: (task: string) => void,
-    toggleProgressAll: () => void,
     progressAll: boolean,
 }
 
@@ -14,8 +13,9 @@ const validateT = (values: {task: string}) => {
 }
 
 const NewTask: React.FC<NewTaskPropsType> = (props) => {
+    const dispatch = useDispatch()
     const addTask = (values: {task: string}, {setSubmitting, resetForm}: NewTaskFormSetSubmittingType) => {
-        props.addTask(values.task)
+        dispatch({type: ActionTypes.ADD_TASK, payload: values.task})
         setSubmitting(false)
         resetForm()
     }
@@ -29,7 +29,7 @@ const NewTask: React.FC<NewTaskPropsType> = (props) => {
             {({ isSubmitting }) => (
                 <Form>
                     <div className='todo-form'>
-                        <div onClick={props.toggleProgressAll} className='btn-toggleAll'>&#10097;</div>
+                        <div onClick={() => dispatch({type: ActionTypes.TOGGLE_PROGRESS_ALL, payload: props.progressAll})} className='btn-toggleAll'>&#10097;</div>
                         <Field type='text' name='task' className='todo-form__input' placeholder='What needs to be done?'/>
                     </div>
                 </Form>

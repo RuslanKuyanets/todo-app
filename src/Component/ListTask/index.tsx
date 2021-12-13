@@ -2,9 +2,7 @@ import { TodoListItemType } from '../../Redux/todo-reducer';
 import Task from '../Task';
 
 export type ListTaskPropsType = {
-    removeTask: (id: string) => void,
-    toggleProgress: (task: TodoListItemType) => void,
-    changeTask: (task: TodoListItemType) => void,  
+
 }
 
 const ListTask: React.FC<ListTaskPropsType & { tasks: TodoListItemType[], changedFilter: string }> = (props) => {
@@ -13,9 +11,6 @@ const ListTask: React.FC<ListTaskPropsType & { tasks: TodoListItemType[], change
             {props.tasks.map(task => {
                 return (
                     <Task task={task}
-                        removeTask={props.removeTask}
-                        toggleProgress={props.toggleProgress}
-                        changeTask={props.changeTask}
                         key={task.id}
                     />
                 )
